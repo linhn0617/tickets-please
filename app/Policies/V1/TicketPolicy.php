@@ -40,7 +40,7 @@ class TicketPolicy
      */
     public function delete(User $user, Ticket $ticket)
     {
-        if($user->tokenCan(Abilities::DeleteOwnTicket)){
+        if($user->tokenCan(Abilities::DeleteTicket)){
             return true;
         }else if($user->tokenCan(Abilities::DeleteOwnTicket)){
             return $user->id === $ticket->user_id;
@@ -58,12 +58,9 @@ class TicketPolicy
     }
 
 
-    public function store(User $user, Ticket $ticket)
+    public function store(User $user)
     {
-        if($user->tokenCan(Abilities::CreateTicket)){
-            return true;
-        }
-        return false;
+        return $user->tokenCan(Abilities::CreateTicket)||$user->tokenCan(Abilities::CreateOwnTicket);
     }
 
 
